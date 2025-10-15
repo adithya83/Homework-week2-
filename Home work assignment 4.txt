@@ -298,3 +298,38 @@ Persona:
 Output:
  - Include the comments section,  also include the key logic or scenario details
 - Follow the code standard as per the tech stack given
+
+
+
+import { test, expect } from '@playwright/test';
+
+test('Create Lead with valid data', async ({ page }) => {
+  // Step 1: Navigate to the application
+  await page.goto('http://leaftaps.com/opentaps');
+
+  // Step 2: Login with valid credentials
+  await page.fill('#username', 'DemoSalesManager');
+  await page.fill('#password', 'crmsfa');
+  await page.click('.decorativeSubmit');
+
+  // Step 3: Navigate to Create Lead form
+  await page.click('text=CRM/SFA');
+  await page.click('text=Create Lead');
+
+  // Step 4: Fill mandatory lead details
+  await page.fill('#createLeadForm_companyName', 'TestLeaf');
+  await page.fill('#createLeadForm_firstName', 'Babu');
+  await page.fill('#createLeadForm_lastName', 'Manickam');
+
+  // Step 5: Select Source from dropdown by visible text
+  await page.selectOption('#createLeadForm_dataSourceId', { label: 'Employee' });
+
+  // Step 6: Select Marketing Campaign by value
+  await page.selectOption('#createLeadForm_marketingCampaignId', { value: '9001' });
+
+  // Step 7: Submit the form
+  await page.click('[name="submitButton"]');
+
+  // Optional: Verify navigation or success (e.g., check new page title)
+  // await expect(page).toHaveTitle(/.*Lead Details.*/);
+});

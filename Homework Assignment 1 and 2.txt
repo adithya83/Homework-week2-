@@ -1,0 +1,182 @@
+home work assignment 1
+---------------------------------------------------------
+A sample user story:
+
+Instructions:
+
+As a registered customer,I want to view my account balance and recent transactions in real time,so that I can monitor my spending and ensure there are no unauthorized activities.As an Test Engineer  use the instrcions in the prompt ,
+
+Instructions 
+Generate Non functional test cases for the above user story
+Genrate only 6 Non-functional test cases\n- Generated Test cases should be easly understanble
+ Genrated  Test cases should include steps, expected results and acceptance criteria
+ Genrate few negative cases and label them as negative cases
+   
+Context:
+
+ an AI Assistant give me a Non-Functional Test cases for the user story
+
+Example:
+Verify  that sensitive account details (e.g., full account number, routing number) are masked in the UI.(Come under security)
+-Measure page load time for the dashboard (balance + last 10 transactions) on a 3G/4G network.(Comes under performance testing)
+
+| **TC ID**   | **Category**                  | **Test Scenario / Objective**                                                       | **Test Steps**                                                                                                                                  | **Expected Result**                                                             | **Acceptance Criteria**                                                         |
+| ----------- | ----------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **NFTC_01** | **Performance**               | Verify the dashboard (balance + recent transactions) loads within acceptable time.  | 1. Log in with valid credentials.<br>2. Navigate to “Account Summary”.<br>3. Measure page load time.                                            | Page loads within **3 seconds** on 4G connection.                               | 90% of users should experience ≤ 3 sec load time on 4G.                         |
+| **NFTC_02** | **Security**                  | Ensure sensitive account details (e.g., account number, routing number) are masked. | 1. Log in as a valid user.<br>2. Observe displayed account details.                                                                             | Only last 4 digits of account number visible; rest masked.                      | No full sensitive data should be exposed on UI or API response.                 |
+| **NFTC_03** | **Reliability**               | Verify real-time balance and transaction updates without delay.                     | 1. Perform a transaction (e.g., transfer ₹100).<br>2. Refresh dashboard.<br>3. Check if updated balance and new transaction appear immediately. | Balance and transaction list update within **2 seconds** of the transaction.    | Real-time updates visible without manual page reload.                           |
+| **NFTC_04** | **Usability (Negative Case)** | Verify system behavior when internet speed is very slow (2G network).               | 1. Simulate 2G network.<br>2. Load the dashboard page.                                                                                          | System should show a “slow network” message without UI crash.                   | Application should handle slow networks gracefully with proper user feedback.   |
+| **NFTC_05** | **Security (Negative Case)**  | Validate session timeout when user is inactive for a long period.                   | 1. Log in successfully.<br>2. Keep session idle for 10 minutes (default timeout).<br>3. Attempt to refresh page.                                | System should log user out and show session timeout message.                    | Inactive sessions must auto-expire per security policy.                         |
+| **NFTC_06** | **Compatibility**             | Verify application responsiveness across multiple browsers and devices.             | 1. Open the dashboard on Chrome, Edge, Safari (desktop & mobile).<br>2. Verify UI alignment and performance.                                    | All UI elements should render correctly; performance consistent across devices. | Dashboard should be fully functional and responsive across supported platforms. |
+
+
+-----------------------------------------------------------
+
+
+User Story:
+As a registered customer,I want to view my account balance and recent transactions in real time,so that I can monitor my spending and ensure there are no unauthorized activities.
+
+Prompt to generate  non-functional test casaes Model used "moonshotai/kimi-k2-instruct-0905"
+
+{
+  "model": "moonshotai/kimi-k2-instruct-0905",
+  "messages": [
+    {
+      "role": "user",
+      "content": "As a registered customer,I want to view my account balance and recent transactions in real time,so that I can monitor my spending and ensure there are no unauthorized activities.As an Test Engineer  use the instrcions in the prompt ,Instructions (user prompt)\n\n- Generate Non functional test cases for the above user story\n- Genrate only 6 Non-functional test cases\n- Generated Test cases should be easly understanble\n- Genrated  Test cases should include steps, expected results and acceptance criteria\n- Genrate few negative cases and label them as negative cases\n-"
+    },
+    {
+      "role": "user",
+      "content": "examples\n\n- Verify  that sensitive account details (e.g., full account number, routing number) are masked in the UI.(Come under security)\n- Measure page load time for the dashboard (balance + last 10 transactions) on a 3G/4G network.(Comes under performance testing)- \n-"
+    },
+    {
+      "role": "system",
+      "content": "As an AI Assistant give me a Non-Functional Test cases for the user story"
+    },
+    {
+      "role": "assistant",
+      "content": "Generate testcases in Tabular form"
+    }
+  ]
+}
+
+
+Outout from API
+
+{
+    "id": "chatcmpl-f1831023-228a-41ad-bb4f-c97bdf0f6c32",
+    "object": "chat.completion",
+    "created": 1760494175,
+    "model": "moonshotai/kimi-k2-instruct-0905",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": " like this:\n\n| Test Case # | Title (concise) | Type | Steps (plain language) | Expected Result | Acceptance Criteria (pass/fail rule) | Negative Case? |\n|-------------|-----------------|------|------------------------|-----------------|-------------------------------------|----------------|\n| NF-01 | Mask sensitive account data in UI | Security | 1. Log in as registered customer. <br>2. Open balance & transactions page. <br>3. Inspect every field. | Only last 4 digits of account/card are shown; full routing number is hidden. | No full sensitive value is readable on screen or in page source. | No |\n| NF-02 | Dashboard loads in 3 s on 4G | Performance | 1. Throttle network to 4G (≈ 20 Mbps/100 ms). <br>2. Log in & request dashboard. <br>3. Measure load time (navigationStart → loadEventEnd). | Load time ≤ 3 s (median of 5 runs). | 95th-percentile ≤ 3 s on 4G. | No |\n| NF-03 | Decrypt traffic with latest TLS version | Security | 1. Capture traffic with Wireshark. <br>2. Verify TLS 1.3 handshake. | No data packets readable; cipher suite is TLS_AES_256_GCM_SHA384 or stronger. | Server refuses TLS < 1.2 and cipher < 128-bit. | No |\n| NF-04 | Handle 5 000 concurrent dashboard views | Performance | 1. Ramp 5 000 virtual users in 5 min. <br>2. Each user logs in & opens dashboard. <br>3. Monitor response time & error rate. | 95th-percentile response ≤ 1.5 s; error rate ≤ 0.1 %. | System stays stable; no memory leak. | No |\n| NF-05 | Dashboard usable on 320 × 568 phone | Usability | 1. Use iPhone SE emulator (320 × 568). <br>2. Rotate to portrait & landscape. <br>3. Navigate without zooming. | All data visible without horizontal scroll; buttons reachable by thumb. | No critical content clipped; WCAG 2.1 reflow OK. | No |\n| NF-06 | Reject expired JWT token (negative) | Security | 1. Log in & grab JWT. <br>2. Wait until token expires (or tamper exp). <br>3. Request balance API. | API returns 401 Unauthorized; customer sees “Session expired, please log in.” | No balance data returned on expired token. | Yes |"
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "queue_time": 0.244787597,
+        "prompt_tokens": 221,
+        "prompt_time": 0.022447913,
+        "completion_tokens": 555,
+        "completion_time": 2.474276888,
+        "total_tokens": 776,
+        "total_time": 2.496724801
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_05df423bab",
+    "x_groq": {
+        "id": "req_01k7jt2ed3f3k9ax9wrxh4gkcq"
+    },
+    "service_tier": "on_demand"
+}
+
+
+
+-----------------------------------------------------------------
+
+B Uploaded the audio file and Extracted the output :
+
+Instructions:
+
+Generate the Text from the uploaded Audio file
+Display the Text in clear form 
+
+Context
+I am AI assistant and I want text from audio 
+
+Through  API output
+
+{
+    "text": " Hello, Testleaf is a best institute for testers. Basically, they can easily convert manual testers into automation testers. I have been associated with Testleaf since 2016. They are the best in business. I started to learn from UFT, Selenium, Affium, whatnot. Everything that belongs to testing, they have it. So, I prefer everyone to join and excel the test. Thanks.",
+    "x_groq": {
+        "id": "req_01k7jt4ffmevdtv0v8dgyekjyc"
+    }
+}
+-------------------------------------------------------------------------
+
+c Extracting the image from OCR 
+
+{
+  "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Extract the text from this image and let the upper or lower cases stay as it is. Return only those characters"
+        },
+        {
+          "type": "image_url",
+          "image_url": { 
+            "url": "https://shifu.hotstarext.com/SOURCE/VOD/cd-2025-08-29/PKLEveryday_Web-025dd6fe-6750-407c-a170-826fd089bed0.jpg" 
+          },
+         "temperature": 0.1
+        }
+      ]
+    }
+   
+  ],
+  "max_tokens": 500
+}
+
+output:
+{
+    "id": "chatcmpl-228c8cdc-6e8b-45af-bd22-533b1f07cb72",
+    "object": "chat.completion",
+    "created": 1760494390,
+    "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "PRO KABADDI LEAGUE \nEVERY DAY 7:30PM ONWARDS"
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "queue_time": 0.138818698,
+        "prompt_tokens": 2356,
+        "prompt_time": 0.072919471,
+        "completion_tokens": 21,
+        "completion_time": 0.047699365,
+        "total_tokens": 2377,
+        "total_time": 0.120618836
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_79da0e0073",
+    "x_groq": {
+        "id": "req_01k7jt92hzf5qtwt5yjqmry46c"
+    },
+    "service_tier": "on_demand"
+}
+
